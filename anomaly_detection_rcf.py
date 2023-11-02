@@ -16,6 +16,12 @@ def main():
     original_data['Type of economic activity'] = original_data['Type of economic activity'].str.replace('*', '')
 
     # Now all '*' characters are removed from the 'Type of economic activity' column
+    distinct_activities = original_data['Type of economic activity'].unique()
+
+    # Write distinct values to a text file
+    with open(os.path.join('', 'distinct_activities.txt'), 'w') as file:
+        for i, activity in enumerate(distinct_activities):
+            file.write(f'{i}. {activity}' + '\n')
 
     # Group the DataFrame by 'District', 'Use', and 'Type of economic activity'
     grouped_data = original_data.groupby(['District', 'Use', 'Type of economic activity'])
