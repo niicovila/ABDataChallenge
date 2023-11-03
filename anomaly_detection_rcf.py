@@ -41,7 +41,7 @@ def main():
         district_dir = os.path.join('anomaly_results', district)
         os.makedirs(district_dir, exist_ok=True)
 
-        subdir = os.path.join(district_dir, f'{use}_{activity.replace('*', '')}')
+        subdir = os.path.join(district_dir, f'{use}_{activity.replace("*", "")}')
         os.makedirs(subdir, exist_ok=True)
         
         district_activity_dataframes[key] = data.copy()
