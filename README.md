@@ -3,11 +3,9 @@
 Dataset definition:
 
 ...
+
 VAE:
 
-=======
-
-AE GH:
 
 https://github.com/TimyadNyda/Variational-Lstm-Autoencoder
 
