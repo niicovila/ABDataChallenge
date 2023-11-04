@@ -17,36 +17,35 @@ def rrcf_anomalies(path):
         original_data['Type of economic activity'] = original_data['Type of economic activity'].str.replace('*', '')
         
         tensor_data, dataframes = prepare_data_ae(original_data)
+        
         # Iterate through grouped data and create separate dataframes for each district and activity combination
         uses = {'0': 'Commercial', '1': 'Industrial'}
-        # Get unique values from 'Type of economic activity' column
-
-
         unique_activities = original_data['Type of economic activity'].unique()
-        # Create a dictionary with indices as keys and unique activities as values
         activities = {str(i): activity for i, activity in enumerate(unique_activities)}
-
         districts = list(range(1, 11))
 
+        district = input("Enter district: ")
         use = input("Enter use (0 for Commercial, 1 for Industrial): ")
         activity = input("Enter activity index: ")
-        district = input("Enter district: ")
-        percentile = 0.99
-        percentile = (input("Choose a percentile to include anomalies based on anomaly score distribution"))
-        if percentile.isnumeric():
-            # Convert percentile to float
-            percentile = float(percentile)
-        else:
-            # Handle the case when percentile is not numeric (optional)
-            print("Percentile wasn't numeric.")
+        
+        percentile = 99
+        
+        # percentile = (input("Choose a percentile to include anomalies based on anomaly score distribution"))
+        # if percentile.isnumeric():
+        #     # Convert percentile to float
+        #     percentile = float(percentile)
+        # else:
+        #     # Handle the case when percentile is not numeric (optional)
+        #     print("Percentile wasn't numeric.")
 
         if use not in uses.keys() or activity not in activities.keys() or int(district) not in districts:
             print("Invalid input. Please provide valid use, activity, and district.")
         else:
             key = f'{district}_{uses[use]}_{activities[activity]}'
             print("Key:", key)
-        
+        print(len(dataframes.keys()))
         if key in dataframes.keys():
+            print('Computing anomalies ...')
             scaler = StandardScaler()
             dataframe = dataframes[key]
             dataframe['Consumption per meter (L/Day)'] = scaler.fit_transform(dataframe[['Consumption per meter (L/Day)']])
@@ -102,7 +101,7 @@ def rrcf_anomalies(path):
                 anomaly_score.append(avg_codisp[i])
 
         
-            percentile_threshold = np.percentile(anomaly_score, 95)
+            percentile_threshold = np.percentile(anomaly_score, percentile)
             selected_anomaly_positions = [position for position, score in enumerate(anomaly_score) if score > percentile_threshold]
         
             anomaly_windows = []
@@ -113,9 +112,12 @@ def rrcf_anomalies(path):
 
             dataframe['Date'] = pd.to_datetime(dataframe[['Year', 'Month', 'Day']])
         
-            selected_rows = dataframe.iloc[selected_anomaly_positions]
-            selected_rows.to_csv(os.path.join(subdir, 'top_anomalies_info.csv'), index=False)
+            formatted_dates = '\n'.join([f"{dataframe['Date'].iloc[anomaly_windows[i][0]]} <--> {dataframe['Date'].iloc[anomaly_windows[i][1] - 1]}" for i in range(len(anomaly_windows))])
+            result = f'''With the selected percentile, we found a total of {len(anomaly_windows)} for the selected district, use, and economic activity.\nThe anomalies were found between the following dates:\n{formatted_dates}'''
+            with open(os.path.join(subdir, 'result.txt'), 'w') as file:
+                file.write(result)
             
+
             # Save the distribution plot as an image
             plt.figure(figsize=(8, 6))
             plt.hist(anomaly_score, bins=30, edgecolor='black')
@@ -137,8 +139,8 @@ def rrcf_anomalies(path):
             plt.ylabel('Consumption (L/Day)')
             plt.title('Time-Dependent Data with Anomaly Scores and Detected Anomalies')
             plt.legend()
-            plt.show()
             plt.savefig(os.path.join(subdir, 'time_series_plot_with_anomalies.png'))
+            plt.show()
             plt.close()
 
     except Exception as e:
