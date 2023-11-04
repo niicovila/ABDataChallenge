@@ -1,6 +1,0 @@
-Year,Month,Day,Number of meters,Consumption (L/Day),Precipitaciones (mm),T_max (C),T_min (C),spi_12,spi_9,scpdsi,District_1,Postcode_8001,Postcode_8002,Postcode_8003,Postcode_8039,Use_Commercial,"Type of economic activity_  Ancillary activities (upholstery, varnishing,",Date
-2019,8,10,1,252.0,0.0,31.9,23.0,0.37,-0.48,1.53,True,False,True,False,False,True,True,2019-08-10
-2019,8,11,1,461.0,12.9,29.8,21.4,0.37,-0.48,1.53,True,False,True,False,False,True,True,2019-08-11
-2019,8,8,1,138.0,0.0,29.3,21.6,0.31,-0.25,1.49,True,False,True,False,False,True,True,2019-08-08
-2020,12,30,1,113.0,0.0,9.4,2.3,1.19,0.99,3.26,True,False,True,False,False,True,True,2020-12-30
-2022,10,8,1,268.0,0.0,21.2,15.9,-0.95,-0.76,-2.52,True,False,False,True,False,True,True,2022-10-08
