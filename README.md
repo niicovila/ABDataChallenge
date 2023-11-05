@@ -32,7 +32,7 @@ python anomaly_detection_rcf.py <file_path>
 
 The program will ask for input:
 
-1- District
+1- Postcode
 
 2- Use
 
