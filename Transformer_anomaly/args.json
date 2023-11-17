@@ -1,0 +1,7 @@
+{
+    "file_path": "/Users/nicolasvila/workplace/uni/ABDataChallenge/ab_bcn_final.csv",
+    "num_epochs": 100,
+    "num_window": 30,
+    "train": "True",
+    "test": "True"
+}
